@@ -1,18 +1,48 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.Enums;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
 {
-    internal class Order // add Client heritance
+    public class Order
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        public Order(int id) // add Client heritance
+        [Required]
+        [ForeignKey("ProductId")]
+        public Product Product { get; set; }
+
+        [Required]
+        [ForeignKey("UserId")]
+        public User User { get; set; }
+
+        [Column(TypeName = "numeric(3)")]
+        public int UnitsAmount { get; set; }
+
+        [Column(TypeName = "numeric(8,2)")]
+        public decimal TotalPrice { get; private set; }
+
+        [Column(TypeName = "datetime")]
+        public DateTime CreationDate { get; private set; } //= DateTime.Now;
+
+        [Column(TypeName = "nvarchar(20)")]
+        public OrderState State { get; private set; } //= OrderState.Pendent;
+
+        public Order()
         {
-            Id = id;
+
+        }
+
+        public Order(Product product, User user, int unitsAmount)
+        {
+            Product = product;
+            User = user;
+            UnitsAmount = unitsAmount;
+            TotalPrice = this.UnitsAmount * this.Product.Price;
+            CreationDate = DateTime.Now;
+            State = OrderState.Pendent;
         }
     }
 }
