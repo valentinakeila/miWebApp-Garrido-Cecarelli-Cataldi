@@ -79,11 +79,11 @@ namespace Infrastructure.Services
 
         public class AuthenticationServiceOptions
         {
-            public const string AutenticacionService = "AutenticacionService";
+            public const string Authentication = "Authentication";
 
-            public string? Issuer { get; set; }
-            public string? Audience { get; set; }
-            public string? SecretForKey { get; set; }
+            public string Issuer { get; set; }
+            public string Audience { get; set; }
+            public string SecretForKey { get; set; }
         }
     }
 }

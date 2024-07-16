@@ -8,6 +8,8 @@ using Application.Services;
 using Microsoft.OpenApi.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Infrastructure.Services;
+using static Infrastructure.Services.AuthenticationService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -77,7 +79,9 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 #endregion
 
 #region Services
+builder.Services.Configure<AuthenticationServiceOptions>(builder.Configuration.GetSection(AuthenticationServiceOptions.Authentication));
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ICustomAuthenticationService, AuthenticationService>();
 #endregion
 
 var app = builder.Build();

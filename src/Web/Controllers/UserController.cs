@@ -2,6 +2,7 @@
 using Application.Models;
 using Application.Models.Request;
 using Domain.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,6 +19,7 @@ namespace Web.Controllers
             _userService = userService;
         }
 
+        [Authorize]
         [HttpGet("[action]")]
         public ActionResult<List<UserDto?>> GetAllUsers()
         {
