@@ -6,6 +6,8 @@ using Domain.Entities;
 using Application.Interfaces;
 using Application.Services;
 using Microsoft.OpenApi.Models;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,6 +56,21 @@ using (var command = connection.CreateCommand())
 
 builder.Services.AddDbContext<ApplicationContext>(dbContextOptions => dbContextOptions.UseSqlite(connection));
 
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new()
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Authentication: Issuer"],
+            ValidAudience = builder.Configuration["Authentication: Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["Authentication: SecretForKey"]))
+        };
+    }
+);
+
 #region Repositories
 builder.Services.AddScoped<IRepositoryBase<User>, EfRepository<User>>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -73,6 +90,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
