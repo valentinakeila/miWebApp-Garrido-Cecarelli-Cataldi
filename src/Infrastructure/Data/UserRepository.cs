@@ -17,6 +17,12 @@ namespace Infrastructure.Data
         {
         }
 
+        public User? GetUserByEmail(string email)
+        {
+            var query = _context.Users.Where(u => u.Email == email);
+            return query.FirstOrDefault();
+        }
+
         public List<User?> GetUsersByRole(UserRole role)
         {
             IQueryable<User?> query;
