@@ -14,7 +14,7 @@ namespace Infrastructure.Data
 
         public RepositoryBase(DbContext dbContext)
         {
-            _dbContext = dbContext;
+            _dbContext = dbContext; 
 
         }
 
