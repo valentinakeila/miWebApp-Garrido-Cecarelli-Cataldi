@@ -70,7 +70,7 @@ namespace Application.Services
                 Name = productCreateRequest.Name,
                 Price = productCreateRequest.Price,
                 Description = productCreateRequest.Description,
-                Category = productCreateRequest.Category,
+                //Category = productCreateRequest.Category,
                 ImageUrl = productCreateRequest.ImageUrl
             };
 
@@ -91,7 +91,7 @@ namespace Application.Services
 
             if (productUpdateRequest.Description != string.Empty) existingProduct.Description = productUpdateRequest.Description;
 
-            if (productUpdateRequest.CategoryId.HasValue && productUpdateRequest.CategoryId != default(int))
+            /*if (productUpdateRequest.CategoryId.HasValue && productUpdateRequest.CategoryId != default(int))
             {
                 
                 var category = _categoryRepository.GetById(productUpdateRequest.CategoryId.Value);
@@ -99,7 +99,7 @@ namespace Application.Services
                 {
                     existingProduct.Category = category;
                 }
-            }
+            }*/
 
             if (productUpdateRequest.ImageUrl != string.Empty) existingProduct.ImageUrl = productUpdateRequest.ImageUrl;
 

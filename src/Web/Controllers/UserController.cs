@@ -2,6 +2,7 @@
 using Application.Models;
 using Application.Models.Request;
 using Domain.Enums;
+using Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,14 @@ namespace Web.Controllers
         [HttpGet("[action]/{id}")]
         public ActionResult<UserDto?> GetUserById([FromRoute] int id)
         {
-            return _userService.GetUserById(id);
+            try
+            {
+                return _userService.GetUserById(id);
+            }
+            catch (NotFoundException)
+            {
+                return NotFound("El Id especificado no existe");
+            }
         }
 
         [HttpGet("[action]/{role}")]
@@ -41,21 +49,47 @@ namespace Web.Controllers
         [HttpPost("[action]")]
         public ActionResult<UserDto> CreateNewUser([FromBody] UserCreateRequest userCreateRequest)
         {
-            return _userService.CreateNewUser(userCreateRequest);
+            try
+            {
+                return _userService.CreateNewUser(userCreateRequest);
+            }
+            catch (Exception)
+            {
+                return Conflict("El email que intenta utilizar ya existe en la base de datos.");
+            }
         }
 
         [HttpPut("[action]/{id}")]
         public ActionResult ModifyUserData([FromRoute] int id, [FromBody] UserUpdateRequest userUpdateRequest)
         {
-            _userService.ModifyUserData(id, userUpdateRequest);
-            return Ok();
+            try
+            {
+                _userService.ModifyUserData(id, userUpdateRequest);
+                return Ok();
+            }
+            catch (NotFoundException)
+            {
+                return NotFound("El Id especificado no existe");
+            }
+            catch (Exception)
+            {
+                return Conflict("El email que intenta utilizar ya existe en la base de datos.");
+            }
+
         }
 
         [HttpDelete("[action]/{id}")]
         public ActionResult DeleteUser([FromRoute] int id)
         {
-            _userService.DeleteUser(id);
-            return Ok();
+            try
+            {
+                _userService.DeleteUser(id);
+                return Ok();
+            }
+            catch (NotFoundException)
+            {
+                return NotFound("El Id especificado no existe");
+            }
         }
     }
 }

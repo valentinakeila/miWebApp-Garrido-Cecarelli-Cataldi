@@ -1,5 +1,6 @@
 ﻿using Application.Models;
 using Application.Models.Request;
+using Domain.Entities;
 using Domain.Enums;
 using System;
 using System.Collections.Generic;
@@ -22,5 +23,7 @@ namespace Application.Interfaces
         void DeleteUser(int id);
 
         List<UserDto> GetUsersByRole(UserRole role);
+
+        UserDto? GetUserByEmail(string email);
     }
 }
