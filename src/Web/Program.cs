@@ -76,12 +76,17 @@ builder.Services.AddAuthentication("Bearer")
 #region Repositories
 builder.Services.AddScoped<IRepositoryBase<User>, EfRepository<User>>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped < IProductRepository , ProductRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 #endregion
 
 #region Services
 builder.Services.Configure<AuthenticationServiceOptions>(builder.Configuration.GetSection(AuthenticationServiceOptions.Authentication));
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICustomAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+
 #endregion
 
 var app = builder.Build();
