@@ -15,6 +15,11 @@ namespace Infrastructure.Data
         {
         }
 
+        public List<Product> GetAllProducts()
+        {
+            return _context.Products.ToList();
+        }
+
         public Product? GetProductById(int id)
         {
             var query = _context.Products.Where(u => u.Id == id);

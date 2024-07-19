@@ -23,6 +23,16 @@ namespace Application.Services
             _productRepository = productRepository;
         }
 
+        public List<ProductDto> GetAllProducts()
+        {
+            var productsList = _productRepository.GetAllProducts();
+
+            if (productsList == null || !productsList.Any())
+                throw new NotFoundException(nameof(Product), "All");
+
+            return ProductDto.CreateList(productsList);
+        } 
+
         public ProductDto? GetProductById(int id)
         {
             var product = _productRepository.GetById(id);
@@ -76,11 +86,20 @@ namespace Application.Services
 
             if (productUpdateRequest.Name != string.Empty) existingProduct.Name = productUpdateRequest.Name;
 
-            if (productUpdateRequest.Price != string.Empty) existingProduct.Price = productUpdateRequest.Price;
+           if (productUpdateRequest.Price.HasValue)
+                existingProduct.Price = productUpdateRequest.Price.Value;
 
             if (productUpdateRequest.Description != string.Empty) existingProduct.Description = productUpdateRequest.Description;
 
-            if (productUpdateRequest.Category != string.Empty) existingProduct.Category = productUpdateRequest.Category;
+            if (productUpdateRequest.CategoryId.HasValue && productUpdateRequest.CategoryId != default(int))
+            {
+                
+                var category = _categoryRepository.GetById(productUpdateRequest.CategoryId.Value);
+                if (category != null)
+                {
+                    existingProduct.Category = category;
+                }
+            }
 
             if (productUpdateRequest.ImageUrl != string.Empty) existingProduct.ImageUrl = productUpdateRequest.ImageUrl;
 
