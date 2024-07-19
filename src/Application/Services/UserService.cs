@@ -41,6 +41,11 @@ namespace Application.Services
 
         public UserDto CreateNewUser(UserCreateRequest userCreateRequest)
         {
+            var user = _userRepository.GetUserByEmail(userCreateRequest.Email);
+
+            if (user != null)
+                throw new Exception();
+
             var newUser = new User();
             newUser.FirstName = userCreateRequest.FirstName;
             newUser.LastName = userCreateRequest.LastName;
@@ -57,6 +62,11 @@ namespace Application.Services
 
             if (user == null)
                 throw new NotFoundException(nameof(User), id);
+
+            var auxUser = _userRepository.GetUserByEmail(userUpdateRequest.Email);
+
+            if (auxUser != null)
+                throw new Exception("El email que intenta utilizar ya existe en la base de datos");
 
             if (userUpdateRequest.FirstName != string.Empty) user.FirstName = userUpdateRequest.FirstName;
 
@@ -87,6 +97,17 @@ namespace Application.Services
                 throw new NotFoundException(nameof(User), role);
 
             return UserDto.CreateList(usersList);
+        }
+
+        public UserDto? GetUserByEmail(string email)
+        {
+            var user = _userRepository.GetUserByEmail(email);
+
+            if (user == null)
+                throw new NotFoundException(nameof(User), email);
+
+            return UserDto.Create(user);
+
         }
     }
 }
