@@ -16,6 +16,8 @@ namespace Domain.Entities
         [Column(TypeName = "nvarchar(500)")]
         public string ImageUrl { get; set; }
 
+
+        public Category() { }
         public Category(string name, string imageUrl)
         {
             Name = name;

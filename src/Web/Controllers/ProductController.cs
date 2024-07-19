@@ -17,7 +17,7 @@ namespace Web.Controllers
             _productService = productService;
         }
 
-        [Authorize]
+       
         [HttpGet("[action]")]
         public ActionResult<List<ProductDto?>> GetAllProducts()
         {

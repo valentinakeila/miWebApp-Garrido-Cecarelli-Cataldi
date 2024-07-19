@@ -17,10 +17,12 @@ namespace Application.Services
     public class ProductService : IProductService
     {
         private readonly IProductRepository _productRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public ProductService(IProductRepository productRepository)
+        public ProductService(IProductRepository productRepository, ICategoryRepository categoryRepository)
         {
             _productRepository = productRepository;
+            _categoryRepository = categoryRepository;
         }
 
         public List<ProductDto> GetAllProducts()
@@ -65,12 +67,15 @@ namespace Application.Services
 
         public ProductDto CreateNewProduct(ProductCreateRequest productCreateRequest)
         {
+            var category = _categoryRepository.GetById(productCreateRequest.CategoryId);
+            if (category == null)
+                throw new NotFoundException(nameof(Category), productCreateRequest.CategoryId);
             var newProduct = new Product
             {
                 Name = productCreateRequest.Name,
                 Price = productCreateRequest.Price,
                 Description = productCreateRequest.Description,
-                //Category = productCreateRequest.Category,
+                Category = category,
                 ImageUrl = productCreateRequest.ImageUrl
             };
 
@@ -91,7 +96,7 @@ namespace Application.Services
 
             if (productUpdateRequest.Description != string.Empty) existingProduct.Description = productUpdateRequest.Description;
 
-            /*if (productUpdateRequest.CategoryId.HasValue && productUpdateRequest.CategoryId != default(int))
+            if (productUpdateRequest.CategoryId.HasValue && productUpdateRequest.CategoryId != default(int))
             {
                 
                 var category = _categoryRepository.GetById(productUpdateRequest.CategoryId.Value);
@@ -99,7 +104,7 @@ namespace Application.Services
                 {
                     existingProduct.Category = category;
                 }
-            }*/
+            }
 
             if (productUpdateRequest.ImageUrl != string.Empty) existingProduct.ImageUrl = productUpdateRequest.ImageUrl;
 

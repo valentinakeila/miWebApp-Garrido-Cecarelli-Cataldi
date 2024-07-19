@@ -20,7 +20,7 @@ namespace Web.Controllers
             _userService = userService;
         }
 
-        [Authorize]
+        
         [HttpGet("[action]")]
         public ActionResult<List<UserDto?>> GetAllUsers()
         {
