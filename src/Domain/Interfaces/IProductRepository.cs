@@ -12,5 +12,6 @@ namespace Domain.Interfaces
         Product? GetProductById(int id);
         List<Product?> GetProductByCategory(int categoryId);
         List<Product?> GetProductByName(string name);
+        List<Product> GetAllProducts();
     }
 }

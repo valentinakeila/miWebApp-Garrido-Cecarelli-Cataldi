@@ -11,6 +11,7 @@ namespace Application.Interfaces
 {
     public interface IProductService
     {
+        List<ProductDto?> GetAllProducts();
         ProductDto? GetProductById(int id);
         List<ProductDto?> GetProductsByCategory(int categoryId);
         List<ProductDto?> GetProductsByName(string name);
