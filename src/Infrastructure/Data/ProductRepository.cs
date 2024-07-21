@@ -17,12 +17,16 @@ namespace Infrastructure.Data
 
         public List<Product> GetAllProducts()
         {
-            return _context.Products.ToList();
+            return _context.Products
+                .Include(p => p.Category)
+                .ToList();
         }
 
         public Product? GetProductById(int id)
         {
-            var query = _context.Products.Where(u => u.Id == id);
+            var query = _context.Products
+                .Include(p => p.Category)
+                .Where(u => u.Id == id);
             return query.FirstOrDefault();
         }
 
@@ -30,7 +34,9 @@ namespace Infrastructure.Data
         {
             IQueryable<Product?> query;
 
-            query = _context.Products.Where(u => u.Category.Id == categoryId);
+            query = _context.Products
+                .Include(p => p.Category)
+                .Where(u => u.Category.Id == categoryId);
 
             return query.ToList();
         }
@@ -38,7 +44,9 @@ namespace Infrastructure.Data
         {
             IQueryable<Product?> query;
 
-            query = _context.Products.Where(u => u.Name == name);
+            query = _context.Products
+                .Include(p => p.Category)
+                .Where(u => u.Name == name);
 
             return query.ToList();
         }

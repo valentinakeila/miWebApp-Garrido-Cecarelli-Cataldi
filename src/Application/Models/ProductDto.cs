@@ -14,20 +14,22 @@ namespace Application.Models
         public decimal Price { get; set; }
         public string Description { get; set; }
 
-        public int Category { get; set; }
+        public int CategoryId{ get; set; }
         public string ImageUrl { get; set; }
 
         public static ProductDto Create(Product product)
         {
-            return new ProductDto
+            var dto = new ProductDto
             {
                 Id = product.Id,
                 Name = product.Name,
                 Price = product.Price,
                 Description = product.Description,
-                Category = product.Category.Id,
+                CategoryId = product.Category.Id,
                 ImageUrl = product.ImageUrl
             };
+
+            return dto;
         }
 
         public static List<ProductDto> CreateList(List<Product> products)

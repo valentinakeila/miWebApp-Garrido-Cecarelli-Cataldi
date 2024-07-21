@@ -23,7 +23,7 @@ namespace Domain.Entities
         public Category Category { get; set; }
 
         [Column(TypeName = "nvarchar(500)")]
-        public string ImageUrl { get; set; }
+        public string? ImageUrl { get; set; }
 
         public Product()
         {

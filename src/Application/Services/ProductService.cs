@@ -25,7 +25,7 @@ namespace Application.Services
             _categoryRepository = categoryRepository;
         }
 
-        public List<ProductDto> GetAllProducts()
+        public List<ProductDto?> GetAllProducts()
         {
             var productsList = _productRepository.GetAllProducts();
 
@@ -37,7 +37,7 @@ namespace Application.Services
 
         public ProductDto? GetProductById(int id)
         {
-            var product = _productRepository.GetById(id);
+            var product = _productRepository.GetProductById(id);
 
             if (product == null)
                 throw new NotFoundException(nameof(Product), id);
@@ -49,7 +49,7 @@ namespace Application.Services
         {
             var productsList = _productRepository.GetProductByCategory(categoryId);
 
-            if (productsList == null)
+            if (productsList == null || !productsList.Any())
                 throw new NotFoundException(nameof(Product), categoryId);
 
             return ProductDto.CreateList(productsList);
@@ -59,7 +59,7 @@ namespace Application.Services
         {
             var productsList = _productRepository.GetProductByName(name);
 
-            if (productsList == null)
+            if (productsList == null || !productsList.Any())
                 throw new NotFoundException(nameof(Product), name);
 
             return ProductDto.CreateList(productsList);
@@ -70,6 +70,7 @@ namespace Application.Services
             var category = _categoryRepository.GetById(productCreateRequest.CategoryId);
             if (category == null)
                 throw new NotFoundException(nameof(Category), productCreateRequest.CategoryId);
+
             var newProduct = new Product
             {
                 Name = productCreateRequest.Name,
