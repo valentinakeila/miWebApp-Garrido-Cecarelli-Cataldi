@@ -24,9 +24,11 @@ namespace Application.Services
 
         public List<OrderDto?> GetAllOrders()
         {
-            var orders = _orderRepository.GetAllOrders();
+            var orderslist = _orderRepository.GetAllOrders();
+            if (orderslist == null || !orderslist.Any())
+                throw new NotFoundException();
 
-            return OrderDto.CreateList(orders);
+            return OrderDto.CreateList(orderslist);
         }
 
         public OrderDto GetOrderById(int id)
@@ -45,12 +47,22 @@ namespace Application.Services
 
             if (user == null)
             {
-                
                 throw new NotFoundException(nameof(User), orderCreateRequest.UserId);
-
-            }else if (product == null)
+            }
+            
+            if (product == null)
             {
                 throw new NotFoundException(nameof(Product), orderCreateRequest.ProductId);
+            }
+
+            if (product.Category == null)
+            {
+                throw new NotFoundException(nameof(Category), product.Id);
+            }
+
+            if (orderCreateRequest.UnitsAmount <= 0)
+            {
+                throw new Exception();
             }
 
             var order = new Order
@@ -59,7 +71,6 @@ namespace Application.Services
                 User = user,
                 UnitsAmount = orderCreateRequest.UnitsAmount,
             };
-
 
             _orderRepository.Add(order);
             return OrderDto.Create(order);
@@ -75,7 +86,6 @@ namespace Application.Services
 
             if (orderUpdateRequest.UnitsAmount != order.UnitsAmount) order.UnitsAmount = orderUpdateRequest.UnitsAmount;
 
-
             _orderRepository.Update(order);
         }
 
@@ -90,20 +100,20 @@ namespace Application.Services
 
         public List<OrderDto?> GetOrdersByUser(int userId)
         {
-            var order = _orderRepository.GetOrdersByUser(userId);
-            if (order == null)
+            var orderslist = _orderRepository.GetOrdersByUser(userId);
+            if (orderslist == null || !orderslist.Any())
                 throw new NotFoundException(nameof(Order), userId);
 
-            return OrderDto.CreateList(order);
+            return OrderDto.CreateList(orderslist);
         }
 
         public List<OrderDto?> GetOrdersByProduct(int productId)
         {
-            var order = _orderRepository.GetOrdersByProduct(productId);
-            if (order == null)
+            var orderslist = _orderRepository.GetOrdersByProduct(productId);
+            if (orderslist == null || !orderslist.Any())
                 throw new NotFoundException(nameof(Order), productId);
 
-            return OrderDto.CreateList(order);
+            return OrderDto.CreateList(orderslist);
         }
 
         public int? GetOrderUnitsAmount(int orderId)

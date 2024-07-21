@@ -24,7 +24,16 @@ namespace Web.Controllers
         [HttpGet("[action]")]
         public ActionResult<List<OrderDto?>> GetAllOrders()
         {
-            return _orderService.GetAllOrders();
+            try
+            {
+                return _orderService.GetAllOrders();
+            }
+            catch (NotFoundException)
+            {
+
+                return NotFound("No existen órdenes almacenadas");
+            }
+            
         }
 
         [HttpGet("[action]/{id}")]
@@ -44,7 +53,18 @@ namespace Web.Controllers
         [HttpPost("[action]")]
         public ActionResult<OrderDto> CreateNewOrder([FromBody] OrderCreateRequest orderCreateRequest)
         {
-            return _orderService.CreateNewOrder(orderCreateRequest);
+            try
+            {
+                return _orderService.CreateNewOrder(orderCreateRequest);
+            }
+            catch (NotFoundException)
+            {
+                return NotFound("El usuario o producto especificado no existe");
+            }
+            catch (Exception)
+            {
+                return Conflict("La cantidad de unidades debe ser mayor a cero");
+            }
         }
 
         [HttpPut("[action]/{id}")]
@@ -87,7 +107,7 @@ namespace Web.Controllers
             }
             catch (NotFoundException)
             {
-                return NotFound("El nombre especificado no existe");
+                return NotFound("El user especificado no existe");
             }
         }
 
@@ -100,7 +120,7 @@ namespace Web.Controllers
             }
             catch (NotFoundException)
             {
-                return NotFound("El nombre especificado no existe");
+                return NotFound("El id especificado no existe");
             }
         }
 

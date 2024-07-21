@@ -12,7 +12,7 @@ namespace Infrastructure.Data
         public List<Order> GetAllOrders()
         {
             return _context.Orders
-                 .Include(o => o.Product)
+                 .Include(o => o.Product.Category)
                  .Include(o => o.User)
                  .ToList();
         }

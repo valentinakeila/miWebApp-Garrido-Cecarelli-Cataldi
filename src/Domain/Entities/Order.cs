@@ -23,9 +23,10 @@ namespace Domain.Entities
 
         [Column(TypeName = "numeric(8,2)")]
         public decimal TotalPrice { get; private set; }
+        //public decimal TotalPrice { get { return UnitsAmount * Product.Price; } }
 
         [Column(TypeName = "datetime")]
-        public DateTime CreationDate { get; private set; } //= DateTime.Now;
+        public DateTime CreationDate { get; private set; } = DateTime.Now;
 
         [Column(TypeName = "nvarchar(20)")]
         public OrderState State { get; set; } //= OrderState.Pendent;
@@ -40,8 +41,6 @@ namespace Domain.Entities
             Product = product;
             User = user;
             UnitsAmount = unitsAmount;
-            TotalPrice = this.UnitsAmount * this.Product.Price;
-            CreationDate = DateTime.Now;
             State = OrderState.Pendent;
         }
     }
