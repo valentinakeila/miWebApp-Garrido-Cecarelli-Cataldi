@@ -8,16 +8,16 @@ namespace Infrastructure.Data
 {
     public class OrderRepository(ApplicationContext context) : EfRepository<Order>(context), IOrderRepository
     {
-        public Order? GetOrderByProduct(int productId)
+        public List<Order?> GetOrdersByProduct(int productId)
         {
             var query = _context.Orders.Where(o => o.Product.Id == productId);
-            return query.FirstOrDefault();
+            return query.ToList();
         }
 
-        public Order? GetOrderByUser(int userId)
+        public List<Order?> GetOrdersByUser(int userId)
         {
             var query = _context.Orders.Where(o => o.User.Id == userId);
-            return query.FirstOrDefault();
+            return query.ToList();
         }
 
         public int? GetOrderUnitsAmount(int orderId)

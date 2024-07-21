@@ -22,9 +22,9 @@ namespace Application.Interfaces
 
         void DeleteOrder(int id);
 
-        List<OrderDto?> GetOrderByUser(int userId);
+        List<OrderDto?> GetOrdersByUser(int userId);
 
-        List<OrderDto?> GetOrderByProduct(int productId);
+        List<OrderDto?> GetOrdersByProduct(int productId);
 
         int? GetOrderUnitsAmount(int orderId);
 

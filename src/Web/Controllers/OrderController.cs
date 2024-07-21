@@ -79,11 +79,11 @@ namespace Web.Controllers
 
 
         [HttpGet("[Action]/{userId}")]
-        public ActionResult<List<OrderDto?>> GetOrderByUser([FromRoute] int userId)
+        public ActionResult<List<OrderDto?>> GetOrdersByUser([FromRoute] int userId)
         {
             try
             {
-                return _orderService.GetOrderByUser(userId);
+                return _orderService.GetOrdersByUser(userId);
             }
             catch (NotFoundException)
             {
@@ -92,11 +92,11 @@ namespace Web.Controllers
         }
 
         [HttpGet("[Action]/{productId}")]
-        public ActionResult<List<OrderDto?>> GetOrderByProduct([FromRoute] int productId)
+        public ActionResult<List<OrderDto?>> GetOrdersByProduct([FromRoute] int productId)
         {
             try
             {
-                return _orderService.GetOrderByProduct(productId);
+                return _orderService.GetOrdersByProduct(productId);
             }
             catch (NotFoundException)
             {
