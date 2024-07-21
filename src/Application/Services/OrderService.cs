@@ -24,14 +24,14 @@ namespace Application.Services
 
         public List<OrderDto?> GetAllOrders()
         {
-            var orders = _orderRepository.List();
+            var orders = _orderRepository.GetAllOrders();
 
             return OrderDto.CreateList(orders);
         }
 
         public OrderDto GetOrderById(int id)
         {
-            var order = _orderRepository.GetById(id);
+            var order = _orderRepository.GetOrderById(id);
             if (order == null)
                 throw new NotFoundException(nameof(Order), id);
 
@@ -41,7 +41,7 @@ namespace Application.Services
         public OrderDto CreateNewOrder(OrderCreateRequest orderCreateRequest)
         {
             var user = _userRepository.GetById(orderCreateRequest.UserId);
-            var product = _productRepository.GetById(orderCreateRequest.ProductId);
+            var product = _productRepository.GetProductById(orderCreateRequest.ProductId);
 
             if (user == null)
             {

@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.Models;
+using Domain.Entities;
 using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -8,15 +9,39 @@ namespace Infrastructure.Data
 {
     public class OrderRepository(ApplicationContext context) : EfRepository<Order>(context), IOrderRepository
     {
+        public List<Order> GetAllOrders()
+        {
+            return _context.Orders
+                 .Include(o => o.Product)
+                 .Include(o => o.User)
+                 .ToList();
+        }
+
+        public Order? GetOrderById(int id)
+        {
+            return _context.Orders
+                 .Include(o => o.Product)
+                 .Include(o => o.User)
+                 .Where(o => o.Id == id)
+                 .FirstOrDefault();
+        }
+
         public List<Order?> GetOrdersByProduct(int productId)
         {
-            var query = _context.Orders.Where(o => o.Product.Id == productId);
+            var query = _context.Orders
+                .Include( o => o.Product)
+                .Include( o => o.User)
+                .Where(o => o.Product.Id == productId);
+
             return query.ToList();
         }
 
         public List<Order?> GetOrdersByUser(int userId)
         {
-            var query = _context.Orders.Where(o => o.User.Id == userId);
+            var query = _context.Orders
+                .Include(o => o.User)
+                .Include(o => o.Product)
+                .Where(o => o.User.Id == userId);
             return query.ToList();
         }
 

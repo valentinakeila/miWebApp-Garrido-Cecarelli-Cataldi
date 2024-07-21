@@ -10,7 +10,8 @@ namespace Domain.Interfaces
     
     public interface IOrderRepository : IRepositoryBase<Order>
     {
-
+        List<Order?> GetAllOrders();
+        Order? GetOrderById(int id);
         List<Order?> GetOrdersByUser(int userId);
 
         List<Order?> GetOrdersByProduct(int productId);
