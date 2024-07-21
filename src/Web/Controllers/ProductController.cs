@@ -1,8 +1,11 @@
 ﻿using Application.Interfaces;
 using Application.Models;
 using Application.Models.Request;
+using Domain.Entities;
+using Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Xml.Linq;
 
 namespace Web.Controllers
 {
@@ -27,19 +30,47 @@ namespace Web.Controllers
         [HttpGet("[action]/{id}")]
         public ActionResult<ProductDto?> GetProductById([FromRoute] int id)
         {
-            return _productService.GetProductById(id);
+            try
+            {
+                return _productService.GetProductById(id);
+            }
+            catch (NotFoundException)
+            {
+
+                return NotFound("El Id especificado no existe");
+            }
+
+            
         }
 
         [HttpGet("[action]/{categoryId}")]
         public ActionResult<List<ProductDto>> GetProductsByCategory([FromRoute] int categoryId) 
         {
-            return _productService.GetProductsByCategory(categoryId);
+            try
+            {
+                return _productService.GetProductsByCategory(categoryId);
+            }
+            catch (NotFoundException)
+            {
+
+                return NotFound("El Id de categoría especificado no existe");
+            }
+            
         }
 
         [HttpGet("[action]/{name}")]
-        public ActionResult<List<ProductDto>> GetProductsByName([FromRoute] string name)
+        public ActionResult<List<ProductDto?>> GetProductsByName([FromRoute] string name)
         {
-            return _productService.GetProductsByName(name);
+            try
+            {
+                return _productService.GetProductsByName(name);
+            }
+            catch (NotFoundException)
+            {
+
+                return NotFound("El nombre del producto especificado no existe");
+            }
+            
         }
 
         [HttpPost("[action]")]
@@ -51,15 +82,31 @@ namespace Web.Controllers
         [HttpPut("[action]/{id}")]
         public ActionResult ModifyProductData([FromRoute] int id, [FromBody] ProductUpdateRequest productUpdateRequest)
         {
-            _productService.ModifyProductData(id, productUpdateRequest);
-            return Ok();
+            try
+            {
+                _productService.ModifyProductData(id, productUpdateRequest);
+                return Ok();
+            }
+            catch (NotFoundException)
+            {
+
+                return NotFound("El id especificado no existe");
+            }
         }
 
         [HttpDelete("[action]/{id}")]
         public ActionResult DeleteProduct([FromRoute] int id)
         {
-            _productService.DeleteProduct(id);
-            return Ok();
+            try
+            {
+                _productService.DeleteProduct(id);
+                return Ok();
+            }
+            catch (NotFoundException)
+            {
+
+                return NotFound("El id especificado no existe");
+            }
         }
     }
 }
