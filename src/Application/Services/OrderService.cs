@@ -22,9 +22,6 @@ namespace Application.Services
             _productRepository = productRepository;
         }
 
-
-
-
         public List<OrderDto?> GetAllOrders()
         {
             var orders = _orderRepository.List();
@@ -91,18 +88,18 @@ namespace Application.Services
             _orderRepository.Delete(order);
         }
 
-        public List<OrderDto?> GetOrderByUser(int userId)
+        public List<OrderDto?> GetOrdersByUser(int userId)
         {
-            var order = _orderRepository.GetOrderByUser(userId);
+            var order = _orderRepository.GetOrdersByUser(userId);
             if (order == null)
                 throw new NotFoundException(nameof(Order), userId);
 
             return OrderDto.CreateList(order);
         }
 
-        public List<OrderDto?> GetOrderByProduct(int productId)
+        public List<OrderDto?> GetOrdersByProduct(int productId)
         {
-            var order = _orderRepository.GetOrderByProduct(productId);
+            var order = _orderRepository.GetOrdersByProduct(productId);
             if (order == null)
                 throw new NotFoundException(nameof(Order), productId);
 
