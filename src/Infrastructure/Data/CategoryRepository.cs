@@ -6,20 +6,12 @@ using System.Linq;
 
 namespace Infrastructure.Data
 {
-    public class CategoryRepository : EfRepository<Category>, ICategoryRepository
+    public class CategoryRepository(ApplicationContext context) : EfRepository<Category>(context), ICategoryRepository
     {
-        public CategoryRepository(ApplicationContext context) : base(context)
+        public Category? GetCategoryByName(string name)
         {
-        }
-
-        public List<Category> GetAllCategories()
-        {
-            return List();
-        }
-
-        public new Category GetById(int id)
-        {
-            return GetById(id);
+            var query = _context.Categories.Where(c => c.Name == name);
+            return query.FirstOrDefault();
         }
     }
 }

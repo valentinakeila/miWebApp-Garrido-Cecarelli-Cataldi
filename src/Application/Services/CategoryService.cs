@@ -17,9 +17,12 @@ namespace Application.Services
             _categoryRepository = categoryRepository;
         }
 
-        public List<CategoryDto> GetAllCategories()
+       
+
+        public List<CategoryDto?> GetAllCategories()
         {
-            var categories = _categoryRepository.GetAllCategories();
+            var categories = _categoryRepository.List();
+
             return CategoryDto.CreateList(categories);
         }
 
@@ -32,19 +35,19 @@ namespace Application.Services
             return CategoryDto.Create(category);
         }
 
-        public CategoryDto CreateCategory(CreateCategoryRequest createCategoryRequest)
+        public CategoryDto CreateNewCategory(CategoryCreateRequest categoryCreateRequest)
         {
             var category = new Category
             {
-                Name = createCategoryRequest.Name,
-                ImageUrl = createCategoryRequest.ImageUrl
+                Name = categoryCreateRequest.Name,
+                ImageUrl = categoryCreateRequest.ImageUrl
             };
 
             _categoryRepository.Add(category);
             return CategoryDto.Create(category);
         }
 
-        public void UpdateCategory(int id, UpdateCategoryRequest updateCategoryRequest)
+        public void ModifyCategoryData(int id, CategoryUpdateRequest updateCategoryRequest)
         {
             var category = _categoryRepository.GetById(id);
             if (category == null)
@@ -63,6 +66,15 @@ namespace Application.Services
                 throw new NotFoundException(nameof(Category), id);
 
             _categoryRepository.Delete(category);
+        }
+
+        public CategoryDto GetCategoryByName(string name)
+        {
+            var category = _categoryRepository.GetCategoryByName(name);
+            if (category == null)
+                throw new NotFoundException(nameof(Category));
+
+            return CategoryDto.Create(category);
         }
     }
 }

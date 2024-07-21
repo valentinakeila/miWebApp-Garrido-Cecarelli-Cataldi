@@ -28,7 +28,7 @@ namespace Domain.Entities
         public DateTime CreationDate { get; private set; } //= DateTime.Now;
 
         [Column(TypeName = "nvarchar(20)")]
-        public OrderState State { get; private set; } //= OrderState.Pendent;
+        public OrderState State { get; set; } //= OrderState.Pendent;
 
         public Order()
         {

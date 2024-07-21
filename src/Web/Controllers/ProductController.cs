@@ -31,7 +31,7 @@ namespace Web.Controllers
         }
 
         [HttpGet("[action]/{categoryId}")]
-        public ActionResult<List<ProductDto>> GetProductsByCategory([FromRoute] int categoryId)
+        public ActionResult<List<ProductDto>> GetProductsByCategory([FromRoute] int categoryId) 
         {
             return _productService.GetProductsByCategory(categoryId);
         }
