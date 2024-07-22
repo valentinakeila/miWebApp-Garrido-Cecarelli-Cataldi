@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,8 @@ namespace Domain.Interfaces
         List<Order?> GetOrdersByProduct(int productId);
 
         int? GetOrderUnitsAmount(int orderId);
+
+        List<Order?> GetOrdersByState(OrderState state);
     }
     
 }

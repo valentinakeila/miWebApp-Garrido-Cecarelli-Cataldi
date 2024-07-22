@@ -76,9 +76,10 @@ namespace Web.Controllers
 
             if (userRole == UserRole.Client.ToString() || userRole == UserRole.SysAdmin.ToString())
             {
+                int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
                 try
                 {
-                    return _orderService.CreateNewOrder(orderCreateRequest);
+                    return _orderService.CreateNewOrder(userId, orderCreateRequest);
                 }
                 catch (NotFoundException)
                 {
@@ -208,6 +209,50 @@ namespace Web.Controllers
             }
         }
 
+        [HttpGet("[Action]/{productId}")]
+        public ActionResult<List<OrderDto?>> GetOrdersByState([FromRoute] OrderState state)
+        {
+            var userRole = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+
+            if (userRole == UserRole.Admin.ToString() || userRole == UserRole.SysAdmin.ToString())
+            {
+                try
+                {
+                    return _orderService.GetOrdersByState(state);
+                }
+                catch (NotFoundException)
+                {
+                    return NotFound("No hay órdenes con ese estado");
+                }
+            }
+            else
+            {
+                return Unauthorized();
+            }
+        }
+
+        [HttpGet("[Action]/{productId}")]
+        public ActionResult<List<OrderDto?>> GetMyOrders([FromRoute] OrderState state)
+        {
+            var userRole = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+
+            if (userRole == UserRole.Client.ToString() || userRole == UserRole.SysAdmin.ToString())
+            {
+                int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+                try
+                {
+                    return _orderService.GetOrdersByUser(userId);
+                }
+                catch (NotFoundException)
+                {
+                    return NotFound("No hay órdenes realizadas");
+                }
+            }
+            else
+            {
+                return Unauthorized();
+            }
+        }
     }
 }
 
