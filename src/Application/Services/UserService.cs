@@ -51,7 +51,7 @@ namespace Application.Services
             newUser.LastName = userCreateRequest.LastName;
             newUser.Email = userCreateRequest.Email;
             newUser.Password = userCreateRequest.Password;
-            newUser.Role = userCreateRequest.Role;
+            newUser.Role = UserRole.Client;
 
             return UserDto.Create(_userRepository.Add(newUser));
         }
@@ -71,8 +71,6 @@ namespace Application.Services
             if (userUpdateRequest.FirstName != string.Empty) user.FirstName = userUpdateRequest.FirstName;
 
             if (userUpdateRequest.LastName != string.Empty) user.LastName = userUpdateRequest.LastName;
-
-            if (userUpdateRequest.Email != string.Empty) user.Email = userUpdateRequest.Email;
 
             if (userUpdateRequest.Password != string.Empty) user.Password = userUpdateRequest.Password;
 
@@ -108,6 +106,23 @@ namespace Application.Services
 
             return UserDto.Create(user);
 
+        }
+
+        public UserDto CreateNewAdmin(UserCreateRequest userCreateRequest)
+        {
+            var user = _userRepository.GetUserByEmail(userCreateRequest.Email);
+
+            if (user != null)
+                throw new Exception();
+
+            var newUser = new User();
+            newUser.FirstName = userCreateRequest.FirstName;
+            newUser.LastName = userCreateRequest.LastName;
+            newUser.Email = userCreateRequest.Email;
+            newUser.Password = userCreateRequest.Password;
+            newUser.Role = UserRole.Admin;
+
+            return UserDto.Create(_userRepository.Add(newUser));
         }
     }
 }

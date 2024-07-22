@@ -25,5 +25,7 @@ namespace Application.Interfaces
         List<UserDto> GetUsersByRole(UserRole role);
 
         UserDto? GetUserByEmail(string email);
+
+        UserDto CreateNewAdmin(UserCreateRequest userCreateRequest);
     }
 }
