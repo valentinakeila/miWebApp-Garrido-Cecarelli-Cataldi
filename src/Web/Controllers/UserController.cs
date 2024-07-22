@@ -20,13 +20,14 @@ namespace Web.Controllers
             _userService = userService;
         }
 
-        
+        [Authorize]
         [HttpGet("[action]")]
         public ActionResult<List<UserDto?>> GetAllUsers()
         {
             return _userService.GetAllUsers();
         }
 
+        [Authorize]
         [HttpGet("[action]/{id}")]
         public ActionResult<UserDto?> GetUserById([FromRoute] int id)
         {
@@ -40,6 +41,7 @@ namespace Web.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("[action]/{role}")]
         public ActionResult<List<UserDto>> GetUsersByRole([FromRoute] UserRole role)
         {
@@ -59,6 +61,7 @@ namespace Web.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut("[action]/{id}")]
         public ActionResult ModifyUserData([FromRoute] int id, [FromBody] UserUpdateRequest userUpdateRequest)
         {
@@ -78,6 +81,7 @@ namespace Web.Controllers
 
         }
 
+        [Authorize]
         [HttpDelete("[action]/{id}")]
         public ActionResult DeleteUser([FromRoute] int id)
         {

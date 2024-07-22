@@ -73,12 +73,14 @@ namespace Web.Controllers
             
         }
 
+        [Authorize]
         [HttpPost("[action]")]
         public ActionResult<ProductDto> CreateNewProduct([FromBody] ProductCreateRequest productCreateRequest)
         {
             return _productService.CreateNewProduct(productCreateRequest);
         }
 
+        [Authorize]
         [HttpPut("[action]/{id}")]
         public ActionResult ModifyProductData([FromRoute] int id, [FromBody] ProductUpdateRequest productUpdateRequest)
         {
@@ -94,6 +96,7 @@ namespace Web.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("[action]/{id}")]
         public ActionResult DeleteProduct([FromRoute] int id)
         {
