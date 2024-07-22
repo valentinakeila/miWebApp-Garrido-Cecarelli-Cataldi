@@ -57,7 +57,12 @@ namespace Application.Services
 
             if (orderCreateRequest.UnitsAmount <= 0)
             {
-                throw new Exception();
+                throw new Exception("La cantidad a pedir debe ser mayor que cero");
+            }
+
+            if (product.Stock < orderCreateRequest.UnitsAmount)
+            {
+                throw new Exception("No hay stock suficiente del producto");
             }
 
             var order = new Order
