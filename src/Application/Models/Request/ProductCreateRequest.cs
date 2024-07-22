@@ -11,6 +11,7 @@ namespace Application.Models.Request
         public decimal Price { get; set; }
         [Required]
         public string Description { get; set; } = string.Empty;
+        public int Stock { get; set; }
         [Required]
         public int CategoryId { get; set; }
         public string? ImageUrl { get; set; } = string.Empty;

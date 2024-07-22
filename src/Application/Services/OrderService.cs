@@ -79,8 +79,6 @@ namespace Application.Services
 
             if (orderUpdateRequest.State != order.State) order.State = orderUpdateRequest.State;
 
-            if (orderUpdateRequest.UnitsAmount != order.UnitsAmount) order.UnitsAmount = orderUpdateRequest.UnitsAmount;
-
             _orderRepository.Update(order);
         }
 

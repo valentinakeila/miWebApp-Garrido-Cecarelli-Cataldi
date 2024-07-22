@@ -76,6 +76,7 @@ namespace Application.Services
                 Name = productCreateRequest.Name,
                 Price = productCreateRequest.Price,
                 Description = productCreateRequest.Description,
+                Stock = productCreateRequest.Stock,
                 Category = category,
                 ImageUrl = productCreateRequest.ImageUrl
             };
@@ -92,10 +93,11 @@ namespace Application.Services
 
             if (productUpdateRequest.Name != string.Empty) existingProduct.Name = productUpdateRequest.Name;
 
-           if (productUpdateRequest.Price.HasValue)
-                existingProduct.Price = productUpdateRequest.Price.Value;
+            if (productUpdateRequest.Price.HasValue) existingProduct.Price = productUpdateRequest.Price.Value;
 
             if (productUpdateRequest.Description != string.Empty) existingProduct.Description = productUpdateRequest.Description;
+
+            if (productUpdateRequest.Stock.HasValue) existingProduct.Stock = productUpdateRequest.Stock.Value;
 
             if (productUpdateRequest.CategoryId.HasValue && productUpdateRequest.CategoryId != default(int))
             {
