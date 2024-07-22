@@ -55,12 +55,14 @@ namespace Web.Controllers
             
         }
 
+        [Authorize]
         [HttpPost("[action]")]
         public ActionResult<CategoryDto> CreateNewCategory([FromBody] CategoryCreateRequest categoryCreateRequest)
         {
             return _categoryService.CreateNewCategory(categoryCreateRequest);
         }
 
+        [Authorize]
         [HttpPut("[action]/{id}")]
         public ActionResult ModifyCategoryData([FromRoute] int id, [FromBody] CategoryUpdateRequest categoryUpdateRequest)
         {
@@ -76,6 +78,7 @@ namespace Web.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("[action]/{id}")]
         public ActionResult DeleteCategory([FromRoute] int id)
         {
