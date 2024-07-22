@@ -14,5 +14,8 @@ namespace Application.Models.Request
         [Required]
         public int CategoryId { get; set; }
         public string? ImageUrl { get; set; } = string.Empty;
+
+        [Required]
+        public int? Stock { get; set; }
     }
 }

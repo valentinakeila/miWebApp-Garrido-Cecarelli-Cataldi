@@ -25,18 +25,24 @@ namespace Domain.Entities
         [Column(TypeName = "nvarchar(500)")]
         public string? ImageUrl { get; set; }
 
+        [Required]
+        [Column(TypeName = "numeric(4)")]
+        public int? Stock { get; set; }
+
         public Product()
         {
             
         }
 
-        public Product(string name, decimal price, string description, Category category, string imageUrl)
+        public Product(string name, decimal price, string description, Category category, int stock, string imageUrl)
         {
             Name = name;
             Price = price;
             Description = description;
             Category = category;
+            Stock = stock;
             ImageUrl = imageUrl;
+
         }
     }
 }

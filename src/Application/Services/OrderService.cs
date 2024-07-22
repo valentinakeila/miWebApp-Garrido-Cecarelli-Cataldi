@@ -48,9 +48,14 @@ namespace Application.Services
                 
                 throw new NotFoundException(nameof(User), orderCreateRequest.UserId);
 
-            }else if (product == null)
+            }if (product == null)
             {
                 throw new NotFoundException(nameof(Product), orderCreateRequest.ProductId);
+            }
+            // Verifica si la categoría del producto es nula y lanza una excepción si lo es
+            if (product.Category == null)
+            {
+                throw new NotFoundException(nameof(Category), product.Id);
             }
 
             var order = new Order

@@ -77,7 +77,8 @@ namespace Application.Services
                 Price = productCreateRequest.Price,
                 Description = productCreateRequest.Description,
                 Category = category,
-                ImageUrl = productCreateRequest.ImageUrl
+                ImageUrl = productCreateRequest.ImageUrl,
+                Stock = productCreateRequest.Stock,
             };
 
             return ProductDto.Create(_productRepository.Add(newProduct));
@@ -108,6 +109,9 @@ namespace Application.Services
             }
 
             if (productUpdateRequest.ImageUrl != string.Empty) existingProduct.ImageUrl = productUpdateRequest.ImageUrl;
+            
+            if (productUpdateRequest.Stock.HasValue)
+                existingProduct.Stock = productUpdateRequest.Stock.Value;
 
             _productRepository.Update(existingProduct);
         }
