@@ -1,5 +1,6 @@
 ﻿using Application.Models;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -51,6 +52,15 @@ namespace Infrastructure.Data
             
             return order.UnitsAmount;
             
+        }
+
+        public List<Order?> GetOrdersByState(OrderState state)
+        {
+            var query = _context.Orders
+                .Include(o => o.User)
+                .Include(o => o.Product.Category)
+                .Where(o => o.State == state);
+            return query.ToList();
         }
     }
 }

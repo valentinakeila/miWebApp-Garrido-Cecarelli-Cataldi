@@ -40,15 +40,10 @@ namespace Application.Services
             return OrderDto.Create(order);
         }
 
-        public OrderDto CreateNewOrder(OrderCreateRequest orderCreateRequest)
+        public OrderDto CreateNewOrder(int userId, OrderCreateRequest orderCreateRequest)
         {
-            var user = _userRepository.GetById(orderCreateRequest.UserId);
+            var user = _userRepository.GetById(userId);
             var product = _productRepository.GetProductById(orderCreateRequest.ProductId);
-
-            if (user == null)
-            {
-                throw new NotFoundException(nameof(User), orderCreateRequest.UserId);
-            }
             
             if (product == null)
             {
@@ -123,6 +118,15 @@ namespace Application.Services
                 throw new NotFoundException(nameof(Order), orderId);
 
             return unitAmount;
+        }
+
+        public List<OrderDto?> GetOrdersByState(OrderState state)
+        {
+            var orderslist = _orderRepository.GetOrdersByState(state);
+            if (orderslist == null || !orderslist.Any())
+                throw new NotFoundException(nameof(Order), state);
+
+            return OrderDto.CreateList(orderslist);
         }
     }
 }

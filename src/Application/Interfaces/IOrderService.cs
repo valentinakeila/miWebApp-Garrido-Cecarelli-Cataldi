@@ -16,7 +16,7 @@ namespace Application.Interfaces
 
         List<OrderDto?> GetAllOrders();
 
-        OrderDto CreateNewOrder(OrderCreateRequest orderCreateRequest);
+        OrderDto CreateNewOrder(int userId, OrderCreateRequest orderCreateRequest);
 
         void ModifyOrderData(int id, OrderUpdateRequest orderUpdateRequest);
 
@@ -27,6 +27,8 @@ namespace Application.Interfaces
         List<OrderDto?> GetOrdersByProduct(int productId);
 
         int? GetOrderUnitsAmount(int orderId);
+
+        List<OrderDto?> GetOrdersByState(OrderState state);
 
     }
 }

@@ -12,7 +12,7 @@ namespace Application.Models.Request
     public class OrderCreateRequest
     {
 
-        public int UserId { get; set; }
+        //public int UserId { get; set; }
 
         public int ProductId { get; set; }
         public int UnitsAmount { get; set; }
