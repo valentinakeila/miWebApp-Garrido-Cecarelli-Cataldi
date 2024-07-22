@@ -2,9 +2,11 @@
 using Application.Models;
 using Application.Models.Request;
 using Application.Services;
+using Domain.Enums;
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Web.Controllers
 {
@@ -18,7 +20,6 @@ namespace Web.Controllers
         {
             _categoryService = categoryService;
         }
-
 
         [HttpGet("[action]")]
         public ActionResult<List<CategoryDto?>> GetAllCategory()
@@ -39,8 +40,6 @@ namespace Web.Controllers
             }
         }
 
-
-
         [HttpGet("[action]/{name}")]
         public ActionResult<CategoryDto?> GetCategoryByName([FromRoute] string name)
         {
@@ -52,29 +51,45 @@ namespace Web.Controllers
             {
                 return NotFound("El nombre especificado no existe");
             }
-            
         }
 
         [Authorize]
         [HttpPost("[action]")]
         public ActionResult<CategoryDto> CreateNewCategory([FromBody] CategoryCreateRequest categoryCreateRequest)
         {
-            return _categoryService.CreateNewCategory(categoryCreateRequest);
+            var userRole = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+
+            if (userRole == UserRole.Admin.ToString() || userRole == UserRole.SysAdmin.ToString())
+            {
+                return _categoryService.CreateNewCategory(categoryCreateRequest);
+            }
+            else
+            {
+                return Unauthorized();
+            }
         }
 
         [Authorize]
         [HttpPut("[action]/{id}")]
         public ActionResult ModifyCategoryData([FromRoute] int id, [FromBody] CategoryUpdateRequest categoryUpdateRequest)
         {
+            var userRole = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
 
-            try
+            if (userRole == UserRole.Admin.ToString() || userRole == UserRole.SysAdmin.ToString())
             {
-                _categoryService.ModifyCategoryData(id, categoryUpdateRequest);
-                return Ok();
+                try
+                {
+                    _categoryService.ModifyCategoryData(id, categoryUpdateRequest);
+                    return Ok();
+                }
+                catch (NotFoundException)
+                {
+                    return NotFound("El Id especificado no existe");
+                }
             }
-            catch (NotFoundException)
+            else
             {
-                return NotFound("El Id especificado no existe");
+                return Unauthorized();
             }
         }
 
@@ -82,15 +97,23 @@ namespace Web.Controllers
         [HttpDelete("[action]/{id}")]
         public ActionResult DeleteCategory([FromRoute] int id)
         {
-            
-            try
+            var userRole = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+
+            if (userRole == UserRole.Admin.ToString() || userRole == UserRole.SysAdmin.ToString())
             {
-                _categoryService.DeleteCategory(id);
-                return Ok();
+                try
+                {
+                    _categoryService.DeleteCategory(id);
+                    return Ok();
+                }
+                catch (NotFoundException)
+                {
+                    return NotFound("El Id especificado no existe");
+                }
             }
-            catch (NotFoundException)
+            else
             {
-                return NotFound("El Id especificado no existe");
+                return Unauthorized();
             }
         }
     }

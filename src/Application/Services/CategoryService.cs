@@ -5,6 +5,7 @@ using Domain.Entities;
 using Domain.Exceptions;
 using Domain.Interfaces;
 using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace Application.Services
 {
@@ -78,3 +79,6 @@ namespace Application.Services
         }
     }
 }
+
+//int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+//var userRole = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;

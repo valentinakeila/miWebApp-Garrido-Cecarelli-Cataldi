@@ -1,11 +1,14 @@
 ﻿using Application.Interfaces;
 using Application.Models;
 using Application.Models.Request;
+using Application.Services;
 using Domain.Enums;
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
+using System.Security.Claims;
 
 namespace Web.Controllers
 {
@@ -24,20 +27,38 @@ namespace Web.Controllers
         [HttpGet("[action]")]
         public ActionResult<List<UserDto?>> GetAllUsers()
         {
-            return _userService.GetAllUsers();
+            var userRole = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+
+            if (userRole == UserRole.SysAdmin.ToString())
+            {
+                return _userService.GetAllUsers();
+            }
+            else
+            {
+                return Unauthorized();
+            }
         }
 
         [Authorize]
         [HttpGet("[action]/{id}")]
         public ActionResult<UserDto?> GetUserById([FromRoute] int id)
         {
-            try
+            var userRole = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+
+            if (userRole == UserRole.SysAdmin.ToString())
             {
-                return _userService.GetUserById(id);
+                try
+                {
+                    return _userService.GetUserById(id);
+                }
+                catch (NotFoundException)
+                {
+                    return NotFound("El Id especificado no existe");
+                }
             }
-            catch (NotFoundException)
+            else
             {
-                return NotFound("El Id especificado no existe");
+                return Unauthorized();
             }
         }
 
@@ -45,7 +66,16 @@ namespace Web.Controllers
         [HttpGet("[action]/{role}")]
         public ActionResult<List<UserDto>> GetUsersByRole([FromRoute] UserRole role)
         {
-            return _userService.GetUsersByRole(role);
+            var userRole = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+
+            if (userRole == UserRole.SysAdmin.ToString())
+            {
+                return _userService.GetUsersByRole(role);
+            }
+            else
+            {
+                return Unauthorized();
+            }
         }
 
         [HttpPost("[action]")]
@@ -62,37 +92,36 @@ namespace Web.Controllers
         }
 
         [Authorize]
-        [HttpPut("[action]/{id}")]
-        public ActionResult ModifyUserData([FromRoute] int id, [FromBody] UserUpdateRequest userUpdateRequest)
+        [HttpPut("[action]")]
+        public ActionResult ModifyUserData([FromBody] UserUpdateRequest userUpdateRequest)
         {
-            try
-            {
-                _userService.ModifyUserData(id, userUpdateRequest);
-                return Ok();
-            }
-            catch (NotFoundException)
-            {
-                return NotFound("El Id especificado no existe");
-            }
-            catch (Exception)
-            {
-                return Conflict("El email que intenta utilizar ya existe en la base de datos.");
-            }
+            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
 
+            _userService.ModifyUserData(userId, userUpdateRequest);
+            return Ok();
         }
 
         [Authorize]
         [HttpDelete("[action]/{id}")]
         public ActionResult DeleteUser([FromRoute] int id)
         {
-            try
+            var userRole = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+
+            if (userRole == UserRole.SysAdmin.ToString())
             {
-                _userService.DeleteUser(id);
-                return Ok();
+                try
+                {
+                    _userService.DeleteUser(id);
+                    return Ok();
+                }
+                catch (NotFoundException)
+                {
+                    return NotFound("El Id especificado no existe");
+                }
             }
-            catch (NotFoundException)
+            else
             {
-                return NotFound("El Id especificado no existe");
+                return Unauthorized();
             }
         }
 
@@ -100,13 +129,22 @@ namespace Web.Controllers
         [HttpPost("[action]")]
         public ActionResult<UserDto> CreateNewAdmin([FromBody] UserCreateRequest userCreateRequest)
         {
-            try
+            var userRole = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+
+            if (userRole == UserRole.SysAdmin.ToString())
             {
-                return _userService.CreateNewAdmin(userCreateRequest);
+                try
+                {
+                    return _userService.CreateNewAdmin(userCreateRequest);
+                }
+                catch (Exception)
+                {
+                    return Conflict("El email que intenta utilizar ya existe en la base de datos.");
+                }
             }
-            catch (Exception)
+            else
             {
-                return Conflict("El email que intenta utilizar ya existe en la base de datos.");
+                return Unauthorized();
             }
         }
     }

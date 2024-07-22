@@ -1,10 +1,13 @@
 ﻿using Application.Interfaces;
 using Application.Models;
 using Application.Models.Request;
+using Application.Services;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using System.Xml.Linq;
 
 namespace Web.Controllers
@@ -20,7 +23,6 @@ namespace Web.Controllers
             _productService = productService;
         }
 
-       
         [HttpGet("[action]")]
         public ActionResult<List<ProductDto?>> GetAllProducts()
         {
@@ -39,8 +41,6 @@ namespace Web.Controllers
 
                 return NotFound("El Id especificado no existe");
             }
-
-            
         }
 
         [HttpGet("[action]/{categoryId}")]
@@ -55,7 +55,6 @@ namespace Web.Controllers
 
                 return NotFound("El Id de categoría especificado no existe");
             }
-            
         }
 
         [HttpGet("[action]/{name}")]
@@ -70,29 +69,46 @@ namespace Web.Controllers
 
                 return NotFound("El nombre del producto especificado no existe");
             }
-            
         }
 
         [Authorize]
         [HttpPost("[action]")]
         public ActionResult<ProductDto> CreateNewProduct([FromBody] ProductCreateRequest productCreateRequest)
         {
-            return _productService.CreateNewProduct(productCreateRequest);
+            var userRole = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+
+            if (userRole == UserRole.Admin.ToString() || userRole == UserRole.SysAdmin.ToString())
+            {
+                return _productService.CreateNewProduct(productCreateRequest);
+            }
+            else
+            {
+                return Unauthorized();
+            }
         }
 
         [Authorize]
         [HttpPut("[action]/{id}")]
         public ActionResult ModifyProductData([FromRoute] int id, [FromBody] ProductUpdateRequest productUpdateRequest)
         {
-            try
-            {
-                _productService.ModifyProductData(id, productUpdateRequest);
-                return Ok();
-            }
-            catch (NotFoundException)
-            {
+            var userRole = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
 
-                return NotFound("El id especificado no existe");
+            if (userRole == UserRole.Admin.ToString() || userRole == UserRole.SysAdmin.ToString())
+            {
+                try
+                {
+                    _productService.ModifyProductData(id, productUpdateRequest);
+                    return Ok();
+                }
+                catch (NotFoundException)
+                {
+
+                    return NotFound("El id especificado no existe");
+                }
+            }
+            else
+            {
+                return Unauthorized();
             }
         }
 
@@ -100,15 +116,24 @@ namespace Web.Controllers
         [HttpDelete("[action]/{id}")]
         public ActionResult DeleteProduct([FromRoute] int id)
         {
-            try
-            {
-                _productService.DeleteProduct(id);
-                return Ok();
-            }
-            catch (NotFoundException)
-            {
+            var userRole = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
 
-                return NotFound("El id especificado no existe");
+            if (userRole == UserRole.Admin.ToString() || userRole == UserRole.SysAdmin.ToString())
+            {
+                try
+                {
+                    _productService.DeleteProduct(id);
+                    return Ok();
+                }
+                catch (NotFoundException)
+                {
+
+                    return NotFound("El id especificado no existe");
+                }
+            }
+            else
+            {
+                return Unauthorized();
             }
         }
     }

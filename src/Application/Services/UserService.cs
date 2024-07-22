@@ -60,14 +60,6 @@ namespace Application.Services
         {
             var user = _userRepository.GetById(id);
 
-            if (user == null)
-                throw new NotFoundException(nameof(User), id);
-
-            var auxUser = _userRepository.GetUserByEmail(userUpdateRequest.Email);
-
-            if (auxUser != null)
-                throw new Exception("El email que intenta utilizar ya existe en la base de datos");
-
             if (userUpdateRequest.FirstName != string.Empty) user.FirstName = userUpdateRequest.FirstName;
 
             if (userUpdateRequest.LastName != string.Empty) user.LastName = userUpdateRequest.LastName;
