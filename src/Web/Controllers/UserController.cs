@@ -91,5 +91,19 @@ namespace Web.Controllers
                 return NotFound("El Id especificado no existe");
             }
         }
+
+        [Authorize]
+        [HttpPost("[action]")]
+        public ActionResult<UserDto> CreateNewAdmin([FromBody] UserCreateRequest userCreateRequest)
+        {
+            try
+            {
+                return _userService.CreateNewAdmin(userCreateRequest);
+            }
+            catch (Exception)
+            {
+                return Conflict("El email que intenta utilizar ya existe en la base de datos.");
+            }
+        }
     }
 }
