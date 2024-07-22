@@ -68,7 +68,7 @@ namespace Web.Controllers
         }
 
         [HttpPut("[action]/{id}")]
-        public ActionResult ModifyCategoryData([FromRoute] int id, [FromBody] OrderUpdateRequest orderUpdateRequest)
+        public ActionResult ModifyOrderData([FromRoute] int id, [FromBody] OrderUpdateRequest orderUpdateRequest)
         {
 
             try
