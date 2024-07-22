@@ -21,8 +21,8 @@ namespace Domain.Entities
         [Column(TypeName = "numeric(3)")]
         public int UnitsAmount { get; set; }
 
-        [Column(TypeName = "numeric(8,2)")]
-        public decimal TotalPrice { get; private set; }
+        //[Column(TypeName = "numeric(8,2)")]
+        //public decimal TotalPrice { get; private set; }
         //public decimal TotalPrice { get { return UnitsAmount * Product.Price; } }
 
         [Column(TypeName = "datetime")]
