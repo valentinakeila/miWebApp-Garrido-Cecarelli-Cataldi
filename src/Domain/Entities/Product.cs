@@ -22,6 +22,9 @@ namespace Domain.Entities
         [ForeignKey("CategoryId")]
         public Category Category { get; set; }
 
+        [Column(TypeName = "numeric(4)")]
+        public int Stock { get; set; }
+
         [Column(TypeName = "nvarchar(500)")]
         public string? ImageUrl { get; set; }
 
