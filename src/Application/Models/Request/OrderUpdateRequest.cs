@@ -10,7 +10,7 @@ namespace Application.Models.Request
     public class OrderUpdateRequest
     {
 
-        public int UnitsAmount { get; set; }
+        //public int UnitsAmount { get; set; }
 
         public OrderState State { get; set; }  
 

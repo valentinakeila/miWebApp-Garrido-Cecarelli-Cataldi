@@ -13,7 +13,7 @@ namespace Application.Models
         public string Name { get; set; }
         public decimal Price { get; set; }
         public string Description { get; set; }
-
+        public int Stock { get; set; }
         public int CategoryId{ get; set; }
         public string ImageUrl { get; set; }
 
@@ -25,6 +25,7 @@ namespace Application.Models
                 Name = product.Name,
                 Price = product.Price,
                 Description = product.Description,
+                Stock = product.Stock,
                 CategoryId = product.Category.Id,
                 ImageUrl = product.ImageUrl
             };
