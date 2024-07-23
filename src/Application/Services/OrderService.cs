@@ -62,7 +62,7 @@ namespace Application.Services
 
             if (product.Stock < orderCreateRequest.UnitsAmount)
             {
-                throw new Exception("No hay stock suficiente del producto");
+                throw new Exception("No es posible realizar el pedido, no hay stock suficiente");
             }
 
             var order = new Order
@@ -72,7 +72,9 @@ namespace Application.Services
                 UnitsAmount = orderCreateRequest.UnitsAmount,
             };
 
+            product.Stock = product.Stock - orderCreateRequest.UnitsAmount;
             _orderRepository.Add(order);
+            _productRepository.Update(product);
             return OrderDto.Create(order);
         }
 

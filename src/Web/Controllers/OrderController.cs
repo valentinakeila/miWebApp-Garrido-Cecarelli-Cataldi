@@ -81,13 +81,13 @@ namespace Web.Controllers
                 {
                     return _orderService.CreateNewOrder(userId, orderCreateRequest);
                 }
-                catch (NotFoundException)
+                catch (NotFoundException ex)
                 {
-                    return NotFound("El usuario o producto especificado no existe");
+                    return NotFound(ex.Message);
                 }
-                catch (Exception)
+                catch (Exception ex )
                 {
-                    return Conflict("La cantidad de unidades debe ser mayor a cero");
+                    return Conflict(ex.Message);
                 }
             }
             else
