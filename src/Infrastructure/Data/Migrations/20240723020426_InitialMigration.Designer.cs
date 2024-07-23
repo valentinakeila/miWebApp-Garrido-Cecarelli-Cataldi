@@ -11,14 +11,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240711185823_InitialMigration")]
+    [Migration("20240723020426_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.6");
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.7");
 
             modelBuilder.Entity("Domain.Entities.Category", b =>
                 {
@@ -54,9 +54,6 @@ namespace Infrastructure.Data.Migrations
                     b.Property<int>("State")
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("numeric(8,2)");
-
                     b.Property<int>("UnitsAmount")
                         .HasColumnType("numeric(3)");
 
@@ -86,7 +83,6 @@ namespace Infrastructure.Data.Migrations
                         .HasColumnType("nvarchar(400)");
 
                     b.Property<string>("ImageUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Name")
@@ -95,6 +91,9 @@ namespace Infrastructure.Data.Migrations
 
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric(7,2)");
+
+                    b.Property<int>("Stock")
+                        .HasColumnType("numeric(4)");
 
                     b.HasKey("Id");
 
