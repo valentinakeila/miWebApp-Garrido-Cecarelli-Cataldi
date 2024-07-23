@@ -60,7 +60,5 @@ pantallas y tendrá la capacidad de eliminar usuarios.
 
 
 
-<a name="br2"></a> 
 
-**Diagrama de clases:**
 
