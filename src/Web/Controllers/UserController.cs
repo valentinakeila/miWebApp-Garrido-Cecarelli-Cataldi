@@ -51,9 +51,9 @@ namespace Web.Controllers
                 {
                     return _userService.GetUserById(id);
                 }
-                catch (NotFoundException)
+                catch (NotFoundException ex)
                 {
-                    return NotFound("El Id especificado no existe");
+                    return NotFound(ex.Message);
                 }
             }
             else
