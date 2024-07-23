@@ -1,4 +1,4 @@
 Integrantes:
-Manuel Cecarelli
-Valentina Garrido
+Manuel Cecarelli,
+Valentina Garrido,
 Nicolas Cataldi
