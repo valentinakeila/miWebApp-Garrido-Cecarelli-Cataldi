@@ -209,7 +209,7 @@ namespace Web.Controllers
             }
         }
 
-        [HttpGet("[Action]")]
+        [HttpGet("[Action]/{state}")]
         public ActionResult<List<OrderDto?>> GetOrdersByState([FromRoute] OrderState state)
         {
             var userRole = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
