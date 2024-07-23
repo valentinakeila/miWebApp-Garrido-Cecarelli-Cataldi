@@ -52,7 +52,8 @@ namespace Infrastructure.Data.Migrations
                     Price = table.Column<decimal>(type: "numeric(7,2)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(400)", nullable: false),
                     CategoryId = table.Column<int>(type: "INTEGER", nullable: false),
-                    ImageUrl = table.Column<string>(type: "nvarchar(500)", nullable: false)
+                    Stock = table.Column<int>(type: "numeric(4)", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(500)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -74,7 +75,6 @@ namespace Infrastructure.Data.Migrations
                     ProductId = table.Column<int>(type: "INTEGER", nullable: false),
                     UserId = table.Column<int>(type: "INTEGER", nullable: false),
                     UnitsAmount = table.Column<int>(type: "numeric(3)", nullable: false),
-                    TotalPrice = table.Column<decimal>(type: "numeric(8,2)", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     State = table.Column<int>(type: "nvarchar(20)", nullable: false)
                 },
